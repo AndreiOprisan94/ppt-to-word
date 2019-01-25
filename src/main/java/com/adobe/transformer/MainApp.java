@@ -7,6 +7,9 @@ import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.util.List;
 
 public final class MainApp {
@@ -15,23 +18,24 @@ public final class MainApp {
         final var pptSample = MainApp.class.getResourceAsStream("/ppt-sample.pptx");
         final var slideShow = new XMLSlideShow(pptSample);
 
-        printContent(slideShow);
+        printContent(slideShow, System.out);
     }
 
-    private static void printContent(XMLSlideShow powerPoint) {
-        final POIXMLProperties.CoreProperties props = powerPoint.getProperties().getCoreProperties();
-        final String title = props.getTitle();
-        System.out.println("Title: " + title);
+    private static void printContent(XMLSlideShow powerPoint, PrintStream writer) {
+        final POIXMLProperties.CoreProperties properties = powerPoint.getProperties().getCoreProperties();
+        final var title = properties.getTitle();
 
-        for (XSLFSlide slide : powerPoint.getSlides()) {
-            System.out.println("Starting slide...");
+        writer.println("Title: " + title);
+
+        for (var slide : powerPoint.getSlides()) {
+            writer.println("Starting slide...");
             final List<XSLFShape> shapes = slide.getShapes();
 
             for (final var shape : shapes) {
                 if (shape instanceof XSLFTextShape) {
                     final XSLFTextShape textShape = (XSLFTextShape) shape;
-                    final String text = textShape.getText();
-                    System.out.println("Text: " + text);
+                    final var text = textShape.getText();
+                    writer.println("Text: " + text);
                 }
             }
         }
