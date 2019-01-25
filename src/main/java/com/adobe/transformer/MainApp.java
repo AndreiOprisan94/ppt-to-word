@@ -3,12 +3,10 @@ package com.adobe.transformer;
 import org.apache.poi.ooxml.POIXMLProperties;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
 import org.apache.poi.xslf.usermodel.XSLFShape;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -18,7 +16,9 @@ public final class MainApp {
         final var pptSample = MainApp.class.getResourceAsStream("/ppt-sample.pptx");
         final var slideShow = new XMLSlideShow(pptSample);
 
-        printContent(slideShow, System.out);
+        final var document = new XWPFDocument();
+
+        printContent(slideShow, provider.getPrintStream());
     }
 
     private static void printContent(XMLSlideShow powerPoint, PrintStream writer) {
