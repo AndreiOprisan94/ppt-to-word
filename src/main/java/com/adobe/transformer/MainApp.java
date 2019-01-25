@@ -16,12 +16,16 @@ public final class MainApp {
         final var pptSample = MainApp.class.getResourceAsStream("/ppt-sample.pptx");
         final var slideShow = new XMLSlideShow(pptSample);
 
+
+        final var provider = new PrintStreamProvider(PrintStreamProvider.ProviderOption.WORD_DOCUMENT);
+        final var printStream = provider.getPrintStream();
+
         final var document = new XWPFDocument();
 
-        printContent(slideShow, provider.getPrintStream());
+        printContent(slideShow, printStream, document);
     }
 
-    private static void printContent(XMLSlideShow powerPoint, PrintStream writer) {
+    private static void printContent(XMLSlideShow powerPoint, PrintStream writer, XWPFDocument document) {
         final POIXMLProperties.CoreProperties properties = powerPoint.getProperties().getCoreProperties();
         final var title = properties.getTitle();
 
